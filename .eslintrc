@@ -1,0 +1,4 @@
+{
+  // use babel linting
+  "parser": "babel-eslint",
+}

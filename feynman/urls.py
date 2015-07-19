@@ -12,12 +12,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 # import the feynmanapplications
-from .views import Home, RenderLatex
+from .views import Home
+
 
 # define the primary url patterns
 urlpatterns = patterns('',
-    url(r'(?i)^admin/', include(admin.site.urls)),
-    url(r'(?i)^latex/$', RenderLatex.as_view()),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^$', Home.as_view()),
     # add the static urls
 ) 

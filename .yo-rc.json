@@ -1,0 +1,7 @@
+{
+  "generator-django": {
+    "project_name": "feynman",
+    "author_name": "alec aivazis",
+    "mm": false
+  }
+}

@@ -19,16 +19,19 @@ import feynman
 
 # folder definitions
 BASE = os.path.abspath(os.path.join(feynman.home, os.pardir))
+APP_DIR = os.path.join(BASE, 'feynman')
 # important folder definitions
-TEMPLATES = os.path.join(BASE, 'templates')
-RESOURCES = os.path.join(BASE, 'assets')
+TEMPLATES = os.path.join(APP_DIR, 'templates')
+RESOURCES = os.path.join(APP_DIR, 'assets')
 STATIC_DIR = os.path.join(BASE, 'static')
 UPLOADS = os.path.join(STATIC_DIR, 'uploads')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'c_j=+(4w66f+w0z22j$oapix_974gnq8@9+r4)hjf0gea%qd1j'
+SECRET_KEY = 'l)#5uutq*ydm8kd$6uo9x!smdyvzj^z0mhrlpk8d@u5ie8q6cx'
 
-ALLOWED_HOSTS = ['test.feynman.com', 'feynman.aivazis.com']
+# WSGI_APPLICATION = 'apache.wsgi.application'
+
+ALLOWED_HOSTS = ['*']
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -59,7 +62,6 @@ third_party_apps = (
  )
 
 feynman_apps = (
-    'feynman.apps.templatetags',
 )
 
 INSTALLED_APPS = feynman_apps + third_party_apps + django_apps
@@ -78,6 +80,34 @@ ROOT_URLCONF = 'feynman.urls'
 
 APPEND_SLASH = True
 
+
+# Template configuration
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [TEMPLATES],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+            'loaders': [
+                ('pyjade.ext.django.Loader', (
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ))
+            ]
+        },
+    },
+]
+
+
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
@@ -90,37 +120,20 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-# where the static files live
-STATICFILES_DIRS = (
-    RESOURCES,
-)
 
-# Template definitions
-
-TEMPLATE_LOADERS = (
-    ('pyjade.ext.django.Loader',(
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
-)
-
-TEMPLATE_DIRS = (
-    TEMPLATES,
-)
 
 # django compressor settings
 
-COMPRESS_ROOT = STATIC_DIR
 COMPRESS_OUTPUT_DIR = "cache"
 
 stylus_conf = ('-u jeet -u axis -u rupture -I ' +
                os.path.join(RESOURCES,'styles') +' < {infile} > {outfile}')
 
 COMPRESS_PRECOMPILERS = (
-    ('text/stylus', 'stylus '+ stylus_conf),
+    # ('text/cjsx', 'cjsx-transform {infile} | coffee --compile --stdio -b'),
     ('text/coffeescript', 'coffee --compile --stdio -b'),
-    ('text/cjsx', 'cjsx-transform {infile} | coffee --compile --stdio -b'),
-    ('text/es6', 'babel {infile} -o {outfile}'),
+    # ('text/es6', 'babel {infile} -o {outfile}'),
+    ('text/stylus', 'stylus '+ stylus_conf),
 )
 
 # end of file
